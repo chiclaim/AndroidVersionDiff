@@ -69,9 +69,9 @@ class NotifierUtils private constructor() {
                 .setSubText("sub text")
                 .setContentInfo("content info")// don't use setContentInfo(deprecated in API level 24)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
-                .setGroup("my_notification_group")
-                .setStyle(NotificationCompat.BigTextStyle().setSummaryText("setSummaryText"))
-                .setGroupSummary(true)
+//                .setGroup("my_notification_group")
+//                .setStyle(NotificationCompat.BigTextStyle().setSummaryText("setSummaryText"))
+//                .setGroupSummary(true)
 
             notificationManager.notify(
                 1111,

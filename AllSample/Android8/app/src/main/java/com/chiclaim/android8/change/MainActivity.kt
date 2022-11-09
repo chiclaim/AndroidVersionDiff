@@ -30,5 +30,10 @@ class MainActivity : AppCompatActivity() {
         NotifierUtils.sendNotification(this)
     }
 
+    fun occurUnCaughtException(view: View) {
+        val stringNull: String? = null
+        stringNull!!.length
+    }
+
 
 }
