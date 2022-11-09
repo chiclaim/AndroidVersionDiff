@@ -83,13 +83,54 @@ notificationManager.notify(id, builder.build())
 
 
 
+#### Broadcasts 的一些简单科普
 
 
 
+关于隐式广播和显示广播：
+
+- 隐式广播（implicit broadcast）：可以简单的理解为当事件发生时，如果你和其他应用程序都注册了广播，那么你们都会接收到该信息。（一对多关系）
+- 显式广播（explicit broadcasts）：当事件发生时，只有你的应用程序会接收到该消息。（一对一关系）
+
+<p>
+
+广播的接收有两种方式 [receiving-broadcasts](https://developer.android.com/guide/components/broadcasts#receiving-broadcasts)：
+
+- 在 manifest 中注册（manifest-declared receivers），民间也有称之为的静态广播，但是在 Android 官网没有类似的叫法。
+- 程序运行时注册（context-registered receivers），民间也有称之为的动态广播，但是在 Android 官网没有类似的叫法。
+
+<p>
+
+`manifest-declared receivers` 和 `context-registered receivers` 区别是什么？
+
+- 在 manifest 中注册的广播接收者，当事件发生时，系统会启动你的应用程序，哪怕你的应用并没有运行。
+- 在运行时通过 context 对象注册的广播接收者，当事件发生时，需要 context 是有效的。当 context 是 Activity，那么 Activity 没有被销毁才能接收到广播。当 context 是 Application 时，那么只有在程序仍处于运行状态才能接收到广播。
 
 
 
+<p></p>
 
+####  Broadcasts 在 Android 8 中的变化：
+
+
+
+每当广播被发送，应用的广播接收者都会消耗资源。如果很多应用都去注册接收系统事件的广播，那么可能会导致这些 App 接连消耗系统资源。例如 `ACTION_PACKAGE_REPLACED` 是一个隐式广播，当事件发生时，所有注册的应用都会接收到事件。`ACTION_MY_PACKAGE_REPLACED` 就是一个显示广播，虽然 App 可能都会去注册，但是当该事件发生时，只有被升级的 APP 才会接收到。
+
+
+
+所以，为了提高用户体验，避免广播对系统资源消耗过大的问题，Android 8 对广播做调整，可以总结如下几条：
+
+- 不在支持在 manifest 清单文件注册隐式广播（implicit broadcast），但仍然支持在 manifest 清单文件注册显式广播（explicit broadcasts）
+- 可以在运行时注册广播（同时支持隐式和显示广播）
+- 如果广播要求签名权限（signature permission），那么也可以在 manifest 中注册隐式广播。因为当事件发生时，只有和该广播发送者拥有相同的签名的应用才会收到事件通知，而不是所有注册的应用。
+
+
+
+测试案例：例如你想监听设备的网络的变化，该广播是隐式广播，如果在 manifest 中注册，则收不到网络变化的事件，运行时注册可以接收的到。测试代码可以查看 [AllSample/Android8](https://github.com/chiclaim/AndroidVersionDiff/tree/main/AllSample/Android8)
+
+
+
+> 本限制会对所有 Android 8 系统生效，不管应用的 `targetSdkVersion` 是多少。
 
 
 
