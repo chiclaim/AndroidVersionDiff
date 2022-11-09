@@ -118,9 +118,9 @@ notificationManager.notify(id, builder.build())
 
 
 
-所以，为了提高用户体验，避免广播对系统资源消耗过大的问题，Android 8 对广播做调整，可以总结如下几条：
+所以，为了提高用户体验，避免广播对系统资源消耗过大的问题，Android 8 对广播做的调整，可以总结如下几条：
 
-- 不在支持在 manifest 清单文件注册隐式广播（implicit broadcast），但仍然支持在 manifest 清单文件注册显式广播（explicit broadcasts）
+- 不再支持在 manifest 清单文件注册隐式广播（implicit broadcast），但仍然支持在 manifest 清单文件注册显式广播（explicit broadcasts）
 - 可以在运行时注册广播（同时支持隐式和显示广播）
 - 如果广播要求签名权限（signature permission），那么也可以在 manifest 中注册隐式广播。因为当事件发生时，只有和该广播发送者拥有相同的签名的应用才会收到事件通知，而不是所有注册的应用。
 
@@ -136,9 +136,31 @@ notificationManager.notify(id, builder.build())
 
 
 
+### 4. ANDROID_ID 的变化
+
+Android 8 在隐私方面也做了一些变动：
+
+- 如果你的应用所在的系统版本是 Android 8 之前，然后用户将系统升级到 Android 8（API level 26），ANDROID_ID 的值不会发生改变，除非用户后面卸载重装了你的应用。
+
+- 如果你的应用是在 Android 8 上安装的，那么 ANDROID_ID 的值，是 `应用的签名(app siging key)`、`用户（user）`和`设备（device）`三个信息的组合，只要其中一个信息改变了， ANDROID_ID 的值都会发生变化。设备（device）恢复出厂设置， ANDROID_ID 的值也会改变。
+
+- 如果你的应用是在 Android 8 上安装的，那么 ANDROID_ID 的值不会因为卸载重装而发生改变。
+
+- 如果是因为系统升级导致应用的签名 key 发生变化，ANDROID_ID 的值不会改变。
+
+  
 
 
 
+### 5. Thread.UncaughtExceptionHandler
+
+如果应用自定了 `Thread.UncaughtExceptionHandler`，但是没有调用默认的  `defaultExceptionHandler.uncaughtException`，一旦出现未捕获的异常，应用并不会立马退出， 直到应用弹出 ANR。（[点击查看测试代码](https://github.com/chiclaim/AndroidVersionDiff/tree/main/AllSample/Android8)）
+
+在 Android 8 之前，不调用默认的 `defaultExceptionHandler.uncaughtException`，系统不会记录堆栈信息。从 Android 8 开始，系统则会记录异常的堆栈信息。
+
+
+
+> 本限制会对所有 Android 8 系统生效，不管应用的 `targetSdkVersion` 是多少。
 
 
 
