@@ -195,7 +195,7 @@ fun showBuildSerial(){
 
 可以使用 `Build.getSerial()` 来获取硬件序列号，该方法需要 `READ_PHONE_STATE` 权限【Build.getSerial 在 Android 10 中由变更】。
 
-
+> 本变更在 App 的 `targetSdkVersion` >=26 才会生效。
 
 
 
@@ -219,7 +219,7 @@ fun showBuildSerial(){
 
 如果程序的 targetSdkVersion 为 Android 8，那么系统仅仅会赋予你请求的权限。同意分组的权限也需要你显式的请求，只不过系统会自动通过，不会给用户提示。例如用户请求 `READ_EXTERNAL_STORAGE` 被赋予，当请求  `WRITE_EXTERNAL_STORAGE` 权限时，系统会自动同意。
 
-
+> 本变更在 App 的 `targetSdkVersion` >=26 才会生效。
 
 
 
