@@ -26,8 +26,7 @@
         </activity>
 
         <!-- 在 manifest 中注册隐式广播接收者，无法接收到广播 -->
-        <receiver android:name=".NetworkChangeBroadcastReceiver"
-            android:exported="true">
+        <receiver android:name=".NetworkChangeBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
                 <action android:name="android.net.wifi.STATE_CHANGE" />
