@@ -1,14 +1,25 @@
 package com.chiclaim.android8.change
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import java.lang.reflect.Method
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val REQUEST_CODE_READ_PHONE_STATE = 110
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +44,57 @@ class MainActivity : AppCompatActivity() {
     fun occurUnCaughtException(view: View) {
         val stringNull: String? = null
         stringNull!!.length
+    }
+
+    // android 12(xiaomi 11) 返回 unknown
+    // android 6.0.1 (read mi 4A) 返回 Redmi4A-hongmishouji
+    fun showNetHostName(view: View) {
+        val value: String? = try {
+            val getString: Method =
+                Build::class.java.getDeclaredMethod("getString", String::class.java)
+            getString.isAccessible = true
+            getString.invoke(null, "net.hostname").toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        println(value)
+        Toast.makeText(this, "net.hostname=$value", Toast.LENGTH_SHORT).show()
+    }
+
+    fun showSerial(view: View) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_PHONE_STATE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_PHONE_STATE),
+                REQUEST_CODE_READ_PHONE_STATE
+            )
+        } else {
+            showSerial()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+            showSerial()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun showSerial() {
+        val result =
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) Build.SERIAL else Build.getSerial()
+        println(result)
+        Toast.makeText(this, "imei:$result", Toast.LENGTH_SHORT).show()
     }
 
 

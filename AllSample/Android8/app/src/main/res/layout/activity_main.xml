@@ -18,12 +18,28 @@
             android:onClick="sendNotification"
             android:text="send notification"
             android:textAllCaps="false" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="occurUnCaughtException"
-            android:text="occur UnCaught Exception"
+            android:text="unCaught exception"
             android:textAllCaps="false" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showNetHostName"
+            android:text="net host name"
+            android:textAllCaps="false" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showSerial"
+            android:text="show imei"
+            android:textAllCaps="false" />
+
 
     </LinearLayout>
 </ScrollView>

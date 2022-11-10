@@ -141,18 +141,65 @@ notificationManager.notify(id, builder.build())
 Android 8 在隐私方面也做了一些变动：
 
 - 如果你的应用所在的系统版本是 Android 8 之前，然后用户将系统升级到 Android 8（API level 26），ANDROID_ID 的值不会发生改变，除非用户后面卸载重装了你的应用。
-
 - 如果你的应用是在 Android 8 上安装的，那么 ANDROID_ID 的值，是 `应用的签名(app siging key)`、`用户（user）`和`设备（device）`三个信息的组合，只要其中一个信息改变了， ANDROID_ID 的值都会发生变化。设备（device）恢复出厂设置， ANDROID_ID 的值也会改变。
-
 - 如果你的应用是在 Android 8 上安装的，那么 ANDROID_ID 的值不会因为卸载重装而发生改变。
-
 - 如果是因为系统升级导致应用的签名 key 发生变化，ANDROID_ID 的值不会改变。
 
-  
+
+
+> 本限制会对所有 Android 8 系统生效，不管应用的 `targetSdkVersion` 是多少。
 
 
 
-### 5. Thread.UncaughtExceptionHandler
+### 5. 系统属性 net.hostname 变更
+
+从 Android 8.0 (API level 26) 开始，无法查询系统属性 `net.hostname`
+
+```kotlin
+fun showNetHostName(view: View) {
+	val value: String? = try {
+		val getString: Method =
+			Build::class.java.getDeclaredMethod("getString", String::class.java)
+		getString.isAccessible = true
+		getString.invoke(null, "net.hostname").toString()
+	} catch (e: Exception) {
+		e.printStackTrace()
+		null
+	}
+	println(value)
+	Toast.makeText(this, "net.hostname=$value", Toast.LENGTH_SHORT).show()
+}
+```
+
+
+
+经测试：上述代码在  android 12 (xiaomi 11) 返回 `unknown`；在 android 6.0.1 (read mi 4A) 返回 `Redmi4A-hongmishouji`
+
+
+
+> 本限制会对所有 Android 8 系统生效，不管应用的 `targetSdkVersion` 是多少。
+
+
+
+### 6. Build.SERIAL 变更
+
+从 Android 8.0 (API level 26) 开始 Build.SERIAL 已经被废弃：
+
+```kotlin
+fun showBuildSerial(){
+    println(Build.SERIAL)
+}
+```
+
+经测试：上述代码在  android 12 (xiaomi 11) 返回 `unknown`；在 android 6.0.1 (read mi 4A) 返回 `298bd1947d04`
+
+可以使用 `Build.getSerial()` 来获取硬件序列号，该方法需要 `READ_PHONE_STATE` 权限【Build.getSerial 在 Android 10 中由变更】。
+
+
+
+
+
+### 7. Thread.UncaughtExceptionHandler
 
 如果应用自定了 `Thread.UncaughtExceptionHandler`，但是没有调用默认的  `defaultExceptionHandler.uncaughtException`，一旦出现未捕获的异常，应用并不会立马退出， 直到应用弹出 ANR。（[点击查看测试代码](https://github.com/chiclaim/AndroidVersionDiff/tree/main/AllSample/Android8)）
 
@@ -161,6 +208,16 @@ Android 8 在隐私方面也做了一些变动：
 
 
 > 本限制会对所有 Android 8 系统生效，不管应用的 `targetSdkVersion` 是多少。
+
+
+
+### 8. Permission 行为调整
+
+在 Android 8.0 (API level 26) 之前，应用运行时请求的权限被同意时，那么系统也会将属于该分组下的其他权限一同赋予。例如用于请求了 `READ_EXTERNAL_STORAGE` 那么系统也会赋予 `WRITE_EXTERNAL_STORAGE` 权限。
+
+
+
+如果程序的 targetSdkVersion 为 Android 8，那么系统仅仅会赋予你请求的权限。同意分组的权限也需要你显式的请求，只不过系统会自动通过，不会给用户提示。例如用户请求 `READ_EXTERNAL_STORAGE` 被赋予，当请求  `WRITE_EXTERNAL_STORAGE` 权限时，系统会自动同意。
 
 
 

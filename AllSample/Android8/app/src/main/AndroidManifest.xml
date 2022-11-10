@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chiclaim.android8.change">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
 
     <application
         android:name=".MyApplication"
