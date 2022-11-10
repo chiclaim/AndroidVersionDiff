@@ -2,6 +2,7 @@ package com.chiclaim.android8.change
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -95,6 +96,10 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) Build.SERIAL else Build.getSerial()
         println(result)
         Toast.makeText(this, "imei:$result", Toast.LENGTH_SHORT).show()
+    }
+
+    fun showTransparentActivity(view: View) {
+        startActivity(Intent(this, TransparentActivity::class.java))
     }
 
 

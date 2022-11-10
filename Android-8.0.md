@@ -4,7 +4,7 @@
 
 
 
-> 官方关于 [Android 8 Code Sample](https://developer.android.com/about/versions/oreo/android-8.0-samples) 有兴趣可以运行看下效果。
+> 本文的 Android 包含 Android 8.0 和 8.1 。另外，官方关于 [Android 8 Code Sample](https://developer.android.com/about/versions/oreo/android-8.0-samples) 有兴趣可以运行看下效果。
 
 
 
@@ -48,7 +48,34 @@ android.app.RemoteServiceException
 
 
 
-### 2. Notification 通知栏变化
+### 2. 透明主题的 Activity 不能设置朝向
+
+如果你将 Activity 的主题设置为透明样式：
+
+```xml
+<activity android:name=".TransparentActivity"
+          android:screenOrientation="portrait"
+          android:theme="@style/TransparentDialogStyle"/>
+```
+
+那么你将喜提如下异常：
+
+```java
+java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation
+```
+
+经过不同的版本及不同的 `targetSdkVersion`  测试，上述问题只会在 `Android 8 (API Level 26)` 机器中出现：
+
+- 当程序的 `targetSdkVersion<=26` 则不会抛出异常。
+- 当程序的 `targetSdkVersion>26` 则抛出异常。
+
+
+
+最坑的是在 [Android 8.0 的变更](https://developer.android.com/about/versions/oreo) 中没有找到有关描述（悄无声息改的）。我们绝大部分的应用都会兼容 Android 8.0，但是开发测试的机器往往是比较新的，导致上线才知道问题所在。
+
+
+
+### 3. Notification 通知栏变化
 
 从 Android 8.0 （API level 26）开始，每个 Notification 必须分配一个 channel。
 
@@ -79,7 +106,7 @@ notificationManager.notify(id, builder.build())
 
 
 
-### 3. Broadcasts 广播的调整
+### 4. Broadcasts 广播的调整
 
 
 
@@ -136,7 +163,7 @@ notificationManager.notify(id, builder.build())
 
 
 
-### 4. ANDROID_ID 的变化
+### 5. ANDROID_ID 的变化
 
 Android 8 在隐私方面也做了一些变动：
 
@@ -151,7 +178,7 @@ Android 8 在隐私方面也做了一些变动：
 
 
 
-### 5. 系统属性 net.hostname 变更
+### 6. 系统属性 net.hostname 变更
 
 从 Android 8.0 (API level 26) 开始，无法查询系统属性 `net.hostname`
 
@@ -181,7 +208,7 @@ fun showNetHostName(view: View) {
 
 
 
-### 6. Build.SERIAL 变更
+### 7. Build.SERIAL 变更
 
 从 Android 8.0 (API level 26) 开始 Build.SERIAL 已经被废弃：
 
@@ -199,7 +226,7 @@ fun showBuildSerial(){
 
 
 
-### 7. Thread.UncaughtExceptionHandler
+### 8. Thread.UncaughtExceptionHandler
 
 如果应用自定了 `Thread.UncaughtExceptionHandler`，但是没有调用默认的  `defaultExceptionHandler.uncaughtException`，一旦出现未捕获的异常，应用并不会立马退出， 直到应用弹出 ANR。（[点击查看测试代码](https://github.com/chiclaim/AndroidVersionDiff/tree/main/AllSample/Android8)）
 
@@ -211,7 +238,7 @@ fun showBuildSerial(){
 
 
 
-### 8. Permission 行为调整
+### 9. Permission 行为调整
 
 在 Android 8.0 (API level 26) 之前，应用运行时请求的权限被同意时，那么系统也会将属于该分组下的其他权限一同赋予。例如用于请求了 `READ_EXTERNAL_STORAGE` 那么系统也会赋予 `WRITE_EXTERNAL_STORAGE` 权限。
 

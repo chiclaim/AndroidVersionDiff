@@ -40,6 +40,13 @@
             android:text="show imei"
             android:textAllCaps="false" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showTransparentActivity"
+            android:text="show transparent activity"
+            android:textAllCaps="false" />
+
 
     </LinearLayout>
 </ScrollView>
