@@ -38,5 +38,27 @@
 
 
 
+### 3. 默认开启网络 TLS
 
+从 Android 9 开始，默认不在支持 HTTP 请求。也就是 `cleartextTrafficPermitted` 默认为 false（cleartext 明文的意思，明文传输不被允许）。如果你需要请求 http 资源，你需要显式的将其设置为 true，例如：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust user added CAs while debuggable only -->
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+    <base-config cleartextTrafficPermitted="true"> <!-- 支持明文传输 -->
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+```
+
+例如， WebView.load("http://www.baidu.com")，会直接提示 `net::ERR_CLEARTEXT_TRAFFIC_PERMITTED`
 
