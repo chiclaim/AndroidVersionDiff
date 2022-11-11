@@ -12,7 +12,13 @@
 
 从 Android 8 开始，要避免随意的调用 `startService` 方法。否则会有很大概率出现：IllegalStateException。
 
-根据 Android 官网描述，如果 App 在后台调用 `startService` 方法，既然在后台不能调用，那在前台能不能调用？经过测试在 `onWindowFocusChanged` 方法里调用也不行。
+根据 Android 官网描述，如果 App 在后台调用 `startService` 方法，就会抛出如下异常：
+
+```
+java.lang.IllegalStateException: Not allowed to start service Intent
+```
+
+既然在后台不能调用，那在前台能不能调用？经过测试在 `onWindowFocusChanged` 方法里调用也不行。
 
 
 
@@ -29,7 +35,7 @@ android.app.RemoteServiceException
 
 
 
-需要注意的是，不能在`Context.startForegroundService()` 后调用 `stopService` 或 `stopSelf`，否则也会立马报上述异常。所以我们一定要注意调用 `stopService` 的时机。使用是需要注意 2 点：
+注意，不能在`Context.startForegroundService()` 后调用 `stopService` 或 `stopSelf`，否则也会立马报上述异常。所以我们一定要注意调用 `stopService` 的时机（一般我们启动服务后， 会在任务执行完了 stopService）。使用是需要注意 2 点：
 
 - ` Context.startForegroundService()` 要和 `startForeground()` 配套使用 
 - 调用 ` Context.startForegroundService()` 后，不能调用 `stopService` 或 `stopSelf`
@@ -228,7 +234,7 @@ fun showBuildSerial(){
 
 ### 8. Thread.UncaughtExceptionHandler
 
-如果应用自定了 `Thread.UncaughtExceptionHandler`，但是没有调用默认的  `defaultExceptionHandler.uncaughtException`，一旦出现未捕获的异常，应用并不会立马退出， 直到应用弹出 ANR。（[点击查看测试代码](https://github.com/chiclaim/AndroidVersionDiff/tree/main/AllSample/Android8)）
+如果应用自定义了 `Thread.UncaughtExceptionHandler`，但是没有调用默认的  `defaultExceptionHandler.uncaughtException`，一旦出现未捕获的异常，应用并不会立马退出， 直到应用弹出 ANR。（[点击查看测试代码](https://github.com/chiclaim/AndroidVersionDiff/tree/main/AllSample/Android8)）
 
 在 Android 8 之前，不调用默认的 `defaultExceptionHandler.uncaughtException`，系统不会记录堆栈信息。从 Android 8 开始，系统则会记录异常的堆栈信息。
 
