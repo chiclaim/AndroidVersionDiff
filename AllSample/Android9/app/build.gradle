@@ -6,13 +6,14 @@ android {
 
     defaultConfig {
         applicationId 'com.chiclaim.android9.change'
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a"
         }
+        useLibrary 'org.apache.http.legacy'
     }
 
     buildTypes {

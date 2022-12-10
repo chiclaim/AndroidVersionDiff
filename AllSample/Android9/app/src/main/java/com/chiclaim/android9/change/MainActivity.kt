@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
+import org.apache.http.params.HttpParams
 
 
 class MainActivity : AppCompatActivity() {

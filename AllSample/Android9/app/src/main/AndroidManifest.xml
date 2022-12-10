@@ -15,6 +15,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/MyTheme">
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <activity
             android:name="com.chiclaim.android9.change.MainActivity"
             android:exported="true">

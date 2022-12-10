@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chiclaim.android8.change">
 
+    <!-- 定义权限 -->
+    <permission android:name="com.chiclaim.android.permission.receiver.permission"/>
+    <!-- 使用刚刚定义的权限 -->
+    <uses-permission android:name="com.chiclaim.android.permission.receiver.permission"/>
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+    <!-- 系统的粘性广播权限 -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
     <application
         android:name=".MyApplication"
@@ -37,6 +44,15 @@
         <activity android:name=".TransparentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentDialogStyle"/>
+
+        <receiver
+            android:name=".StickyBroadcastReceiver"
+            android:exported="false"
+            android:permission="com.chiclaim.android.permission.receiver.permission">
+            <intent-filter>
+                <action android:name="com.chiclaim.android.permission.receiver.action"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 
