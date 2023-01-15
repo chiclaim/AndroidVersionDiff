@@ -4,7 +4,7 @@
 
 ## 1. Foreground services 变更
 
-在前面介绍 Android 8 变更的时候提到，如果在后台 `startService`，系统会抛出异常。需要我们启动前台服务。从 Android 9 开始，使用前台服务需要声明 `FOREGROUND_SERVICE`，否则会抛出 `SecurityException`。
+在前面介绍 Android 8 变更的时候提到，如果在后台 `startService`，系统会抛出异常。需要我们启动前台服务。从 Android 9 开始，使用前台服务需要在清单文件中声明 `android.permission.FOREGROUND_SERVICE`权限，否则会抛出 `SecurityException`。
 
 
 
