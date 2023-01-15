@@ -30,6 +30,16 @@ println(available)
 
 
 
+如果需要查询第三方 App 的信息，从 Android 11 开始需要在清单文件中，添加需要查询的包名：
+
+```
+<queries>
+	<package android:name="com.tencent.mm"/>
+</queries>
+```
+
+
+
 > 本限制会对 `targetSdkVersion>=30 的应用生效。
 
 
