@@ -44,6 +44,20 @@ println(available)
 
 
 
+## 2. 权限变更
+
+
+
+### 2.1 一次性权限（One-time permissions）
+
+从 Android 11 开始，当请求位置、麦克风或相机权限时，系统弹出的 Dialog 会多一个选项：本次运行允许（Only this time）
+
+
+
+### 2.2 自动重置权限
+
+从 Android 11 开始，如果你的 APP 几个月没用被使用，那么系统会将一些敏感的权限自动设置为 “拒绝”
+
 
 
 
